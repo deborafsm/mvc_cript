@@ -20,6 +20,10 @@ public class view_menu_principal extends javax.swing.JFrame {
      */
     public view_menu_principal() {
         initComponents();
+        readJtable();
+        btnCadastrar.setEnabled(false);
+        txtImc.setEnabled(false);
+
     }
 
     public void readJtable() {
@@ -52,8 +56,9 @@ public class view_menu_principal extends javax.swing.JFrame {
     public void calculoImc() {
         double altura = Double.parseDouble(txtAltura.getText());
         double peso = Double.parseDouble(txtPeso.getText());
-        double resposta = (peso / altura * 2);
-        txtImc.setText(String.valueOf(resposta));
+        double resposta = peso / (altura *altura);
+        txtImc.setText(String.valueOf(Math.round(resposta)));
+
     }
 
     /**
@@ -69,14 +74,15 @@ public class view_menu_principal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtAltura = new javax.swing.JTextField();
-        txtPeso = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtImc = new javax.swing.JTextField();
+        txtAltura = new javax.swing.JFormattedTextField();
+        txtPeso = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDados = new javax.swing.JTable();
         btnVerificar = new javax.swing.JButton();
-        brnCadastrar = new javax.swing.JButton();
+        btnCadastrar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         jRadioButton1.setText("jRadioButton1");
 
@@ -89,23 +95,22 @@ public class view_menu_principal extends javax.swing.JFrame {
 
         jLabel2.setText("Peso:");
 
-        txtAltura.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtAlturaActionPerformed(evt);
-            }
-        });
-
-        txtPeso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPesoActionPerformed(evt);
-            }
-        });
-
         jLabel3.setText("IMC:");
 
         txtImc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtImcActionPerformed(evt);
+            }
+        });
+
+        try {
+            txtAltura.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#.##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtAltura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAlturaActionPerformed(evt);
             }
         });
 
@@ -117,22 +122,19 @@ public class view_menu_principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtPeso, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtImc, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtAltura, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGap(18, 18, 18)
+                        .addComponent(txtAltura, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtImc, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPeso, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
-
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {txtAltura, txtImc, txtPeso});
-
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -150,6 +152,8 @@ public class view_menu_principal extends javax.swing.JFrame {
                     .addComponent(txtImc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtAltura, txtImc, txtPeso});
 
         tblDados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -173,16 +177,28 @@ public class view_menu_principal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblDados);
 
         btnVerificar.setText("Verificar");
+        btnVerificar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnVerificarMouseClicked(evt);
+            }
+        });
         btnVerificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVerificarActionPerformed(evt);
             }
         });
 
-        brnCadastrar.setText("Cadastrar");
-        brnCadastrar.addActionListener(new java.awt.event.ActionListener() {
+        btnCadastrar.setText("Cadastrar");
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                brnCadastrarActionPerformed(evt);
+                btnCadastrarActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Limpar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -195,54 +211,63 @@ public class view_menu_principal extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnVerificar)
-                            .addComponent(brnCadastrar))))
+                        .addComponent(btnVerificar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCadastrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnVerificar)
-                .addGap(18, 18, 18)
-                .addComponent(brnCadastrar)
-                .addGap(0, 49, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnVerificar)
+                    .addComponent(btnCadastrar)
+                    .addComponent(jButton1))
+                .addGap(29, 95, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtAlturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlturaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtAlturaActionPerformed
-
     private void txtImcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtImcActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtImcActionPerformed
 
-    private void txtPesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPesoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPesoActionPerformed
-
     private void btnVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarActionPerformed
         calculoImc();
+        btnCadastrar.setEnabled(true);
     }//GEN-LAST:event_btnVerificarActionPerformed
 
-    private void brnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnCadastrarActionPerformed
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         model_pessoa pessoa = new model_pessoa();
         dao_imc dao = new dao_imc();
         campos(pessoa);
         dao.cadastraPessoa(pessoa);
+        readJtable();
 
-    }//GEN-LAST:event_brnCadastrarActionPerformed
+    }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnVerificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVerificarMouseClicked
+
+    }//GEN-LAST:event_btnVerificarMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        limpar();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtAlturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlturaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAlturaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -280,8 +305,9 @@ public class view_menu_principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton brnCadastrar;
+    private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnVerificar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -289,7 +315,7 @@ public class view_menu_principal extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblDados;
-    private javax.swing.JTextField txtAltura;
+    private javax.swing.JFormattedTextField txtAltura;
     private javax.swing.JTextField txtImc;
     private javax.swing.JTextField txtPeso;
     // End of variables declaration//GEN-END:variables

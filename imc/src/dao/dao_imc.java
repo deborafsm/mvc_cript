@@ -32,9 +32,11 @@ public class dao_imc {
     //insert 
     public void cadastraPessoa(model_pessoa pessoa) {
         try {
-            ps = con.prepareStatement("INSERT INTO dados(peso,altura)values(?,?)");
+            ps = con.prepareStatement("INSERT INTO dados(peso,altura,imc)values(?,?,?)");
             ps.setFloat(1, pessoa.getPeso());
             ps.setFloat(2, pessoa.getAltura());
+            ps.setFloat(3,pessoa.getImc());
+            
             ps.executeUpdate();
             JOptionPane.showMessageDialog(null, "Os dados foram inseridos com sucesso!");
         } catch (Exception e) {
@@ -46,7 +48,7 @@ public class dao_imc {
 
     //select
     public List<model_pessoa> mostraDados() {
-        String sql = "";
+        String sql = "select * from dados";
         List<model_pessoa> lstPessoa = new ArrayList<>();
         try {
             ps = con.prepareStatement(sql);
@@ -56,6 +58,8 @@ public class dao_imc {
                 pessoa.setAltura(rs.getFloat("altura"));
                 pessoa.setPeso(rs.getFloat("peso"));
                 pessoa.setImc(rs.getFloat("imc"));
+                lstPessoa.add(pessoa);
+                
             }
         } catch (Exception e) {
             System.out.println("Erro: " + e);
