@@ -1,0 +1,9 @@
+create database imc;
+use imc;
+
+CREATE TABLE dados (
+	id_pessoa INT PRIMARY KEY AUTO_INCREMENT,
+	altura FLOAT,
+	peso FLOAT ,
+	imc FLOAT
+);
